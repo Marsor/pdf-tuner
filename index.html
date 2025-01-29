@@ -3,29 +3,28 @@
 <body>
     <h1>PDF Price Adjuster</h1>
     <input type="file" id="pdfFile" accept=".pdf">
-    <input type="number" id="percentage" value="10" step="1">
+    <input type="number" id="percentage" value="15" step="1">
     <button onclick="processPdf()">Process</button>
 
     <script>
-        async function processPdf() {
-            const file = document.getElementById('pdfFile').files[0];
-            const percentage = document.getElementById('percentage').value;
-            
-            const formData = new FormData();
-            formData.append('pdf', file);
-            formData.append('percentage', percentage);
-
-            const response = await fetch('YOUR_LAMBDA_URL', {
-                method: 'POST',
-                body: formData
-            });
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'adjusted.pdf';
-            a.click();
+        async function processPDF() {
+        const file = document.getElementById('pdfFile').files[0];
+        const percentage = document.getElementById('percentage').value;
+        
+        const response = await fetch(
+            'https://xm35zbtm8i.execute-api.eu-north-1.amazonaws.com/adjust-pdf?percentage=' + percentage,
+            {
+            method: 'POST',
+            body: file
+            }
+        );
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'adjusted.pdf';
+        a.click();
         }
     </script>
 </body>
